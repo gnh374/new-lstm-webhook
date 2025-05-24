@@ -1,0 +1,8 @@
+env/
+venv/
+
+# File konfigurasi dan cache lokal
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
