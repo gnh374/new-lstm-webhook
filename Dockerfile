@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Expose port (sesuaikan jika pakai Flask/FastAPI)
-EXPOSE 5000
+EXPOSE 8000
 
 # Jalankan aplikasi (ganti dengan perintah yang sesuai)
 CMD ["python", "app.py"]

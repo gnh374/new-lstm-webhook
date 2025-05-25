@@ -53,11 +53,56 @@ async def predict_cpu_new(cluster_name, data):
             # Use the new Preprocessor class
             preprocessor = Preprocessor(lookback_window=4, window_length=5, polyorder=3)
             processed_data = preprocessor.transform(df['mean_CPU_usage_rate'].values, df['mean_CPU_usage_rate'].values)
-            
-            # Check if the preprocessor returns a tensor or DataFrame
+              # Check if the preprocessor returns a tensor or DataFrame
             if isinstance(processed_data, torch.Tensor):
-                # If tensor, reshape for model input
-                input_data = processed_data.unsqueeze(0)  # Add batch dimension
+                # If tensor, handle appropriately
+                # Make sure the dimensions are correct
+                if len(processed_data.shape) == 3:
+                    # Shape is likely (batch, seq_len, features)
+                    input_data = processed_data
+                    # Check if the last dimension matches the expected input size
+                    if input_data.size(-1) != len(features):
+                        print(f"Warning: Feature dimension mismatch. Reshaping tensor from {input_data.size(-1)} to {len(features)}")
+                        # Reshape to match expected input size
+                        if input_data.size(-1) > len(features):
+                            # Truncate to the first len(features) dimensions
+                            input_data = input_data[:, :, :len(features)]
+                        else:
+                            # Pad with zeros to match len(features)
+                            padding = torch.zeros(input_data.size(0), input_data.size(1), len(features) - input_data.size(-1), device=input_data.device)
+                            input_data = torch.cat([input_data, padding], dim=-1)
+                elif len(processed_data.shape) == 4:
+                    # If we get a 4D tensor, reduce it to 3D
+                    print(f"Warning: Got 4D tensor with shape {processed_data.shape}, reducing to 3D")
+                    # Typically, the shape would be [batch, seq_len, features, 1] or similar
+                    # We need [batch, seq_len, features]
+                    input_data = processed_data.squeeze(-1)
+                    if input_data.size(-1) != len(features):
+                        print(f"Warning: Feature dimension mismatch. Reshaping tensor from {input_data.size(-1)} to {len(features)}")
+                        if input_data.size(-1) > len(features):
+                            input_data = input_data[:, :, :len(features)]
+                        else:
+                            padding = torch.zeros(input_data.size(0), input_data.size(1), len(features) - input_data.size(-1), device=input_data.device)
+                            input_data = torch.cat([input_data, padding], dim=-1)
+                else:
+                    # If it's 1D or 2D, add necessary dimensions
+                    if len(processed_data.shape) == 1:
+                        # Add batch and sequence dimensions
+                        input_data = processed_data.unsqueeze(0).unsqueeze(0)
+                    else:  # 2D
+                        # Add batch dimension
+                        input_data = processed_data.unsqueeze(0)
+                    
+                    # Check if we need to reshape the tensor
+                    if input_data.size(-1) != len(features) and len(input_data.shape) >= 2:
+                        print(f"Warning: Feature dimension mismatch. Reshaping tensor from {input_data.size(-1)} to {len(features)}")
+                        if input_data.size(-1) > len(features):
+                            input_data = input_data[:, :, :len(features)]
+                        else:
+                            padding = torch.zeros(input_data.size(0), input_data.size(1), len(features) - input_data.size(-1), device=input_data.device)
+                            input_data = torch.cat([input_data, padding], dim=-1)
+                
+                # Make prediction with the correctly shaped tensor
                 raw_prediction = model(input_data)
             else:
                 # If DataFrame, extract features, scale, and convert to tensor
