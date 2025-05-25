@@ -28,4 +28,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 EXPOSE 8000
 
 # Jalankan aplikasi (ganti dengan perintah yang sesuai)
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
