@@ -14,9 +14,9 @@ from scripts.model import Predictor
 from scripts.preprocessing import scale, Preprocessor # Import dari fetch_cpu.py
 
 WEBHOOK_ENDPOINTS = [
-    "http://54.88.29.103:30080/api/trigger",
-    "http://54.162.198.32:30080/api/trigger",
-    "http://98.85.113.75:30080/api/trigger",
+    "http://3.229.64.47:30080/api/trigger",
+    "http://34.193.188.155 :30080/api/trigger",
+    "http://54.162.8.214:30080/api/trigger",
 ]
 
 CPU_MAX = [

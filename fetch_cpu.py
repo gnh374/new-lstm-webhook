@@ -3,13 +3,13 @@ import aiohttp
 
 # List endpoint Prometheus tiap cluster
 PROMETHEUS_ENDPOINTS = [
-    "http://54.88.29.103:30007/api/v1/query",
-    "http://54.162.198.32:30007/api/v1/query",
-    "http://98.85.113.75:30007/api/v1/query",
+    "http://3.229.64.47:30007/api/v1/query",
+    "http://34.193.188.155:30007/api/v1/query",
+    "http://54.162.8.214:30007/api/v1/query",
 ]
 
 CLUSTER_DOWN = [
-    "http://3.208.173.140:30007/api/v1/query"
+    "http://54.236.180.248:30007/api/v1/query"
 ]
 
 LOAD ='sum(rate(container_cpu_usage_seconds_total{namespace="nginx", container!="", container!="POD"}[2m])) [30m:2m]'

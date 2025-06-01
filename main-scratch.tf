@@ -15,7 +15,7 @@ terraform {
 provider "aws" {
   region = "us-east-1"
   assume_role {
-    role_arn = "arn:aws:iam::872717238482:role/LabRole"
+    role_arn = "arn:aws:iam::903619784897:role/LabRole"
   }
 }
 
@@ -27,12 +27,12 @@ resource "random_password" "k3s_token" {
 
 # Fetch the existing VPC
 data "aws_vpc" "existing_vpc" {
-  id = "vpc-09bad494b664adc15"
+  id = "vpc-08b4c8975b54d8fdf"
 }
 
 # Fetch the existing security group
 data "aws_security_group" "existing" {
-  id = "sg-0011cfb37cfee265b"
+  id = "sg-0363557a19c24e7d1"
 }
 
 # Fetch the existing IAM instance profile
@@ -217,9 +217,9 @@ resource "null_resource" "rancher_cluster_registration" {
       set -e
       set -x
 
-      export RANCHER_URL="https://3.208.173.140.sslip.io"
-      export RANCHER_ACCESS_KEY="token-rtv46"
-      export RANCHER_SECRET_KEY="mdv65cpslx4r2b2rcqnkkrnwgq9brmfhlrb2l694jrds46h2fpg5tg"
+      export RANCHER_URL="https://54.236.180.248.sslip.io"
+      export RANCHER_ACCESS_KEY="token-xd7k8"
+      export RANCHER_SECRET_KEY="c5w77jxjkdhlj2ggnzdk86kxw68m4hl72ph5vb8vtnkkrhl7dzv5g2"
       export CLUSTER_NAME="backup-cluster"
       export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
@@ -260,7 +260,7 @@ resource "null_resource" "rancher_cluster_registration" {
           exit 1
       fi
 
-      curl --insecure -sfL "https://3.208.173.140.sslip.io/v3/import/$${REGISTRATION_TOKEN}_$${CLUSTER_ID}.yaml"  | kubectl apply -f -
+      curl --insecure -sfL "https://54.236.180.248.sslip.io/v3/import/$${REGISTRATION_TOKEN}_$${CLUSTER_ID}.yaml"  | kubectl apply -f -
       
       EOL
       EOF
