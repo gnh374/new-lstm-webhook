@@ -27,12 +27,12 @@ resource "random_password" "k3s_token" {
 
 # Fetch the existing VPC
 data "aws_vpc" "existing_vpc" {
-  id = "vpc-08b4c8975b54d8fdf"
+  id = "vpc-098c8406fb9b8e482"
 }
 
 # Fetch the existing security group
 data "aws_security_group" "existing" {
-  id = "sg-0363557a19c24e7d1"
+  id = "sg-075d4e2eaa9a80ad6"
 }
 
 # Fetch the existing IAM instance profile
