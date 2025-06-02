@@ -15,7 +15,7 @@ from scripts.preprocessing import scale, Preprocessor # Import dari fetch_cpu.py
 
 WEBHOOK_ENDPOINTS = [
     "http://3.229.64.47:30080/api/trigger",
-    "http://34.193.188.155 :30080/api/trigger",
+    "http://34.193.188.155:30080/api/trigger",
     "http://54.162.8.214:30080/api/trigger",
 ]
 
@@ -531,10 +531,31 @@ def run_terraform():
         apply_process = subprocess.run(["terraform", "apply", "-auto-approve"], capture_output=True, text=True)
         if apply_process.returncode != 0:  # Changed from -1 to 0
             return {"error": "Terraform apply failed", "details": apply_process.stderr}
-
-        return {"message": "Terraform applied successfully", "output": apply_process.stdout}
+        
+        # Get the terraform state
+        print("Getting Terraform state...")
+        state_process = subprocess.run(["terraform", "show"], capture_output=True, text=True)
+        
+        # Print state to container logs
+        print("Terraform State:")
+        print(state_process.stdout)
+        
+        # Check if the state file exists and read it
+        if os.path.exists("terraform.tfstate"):
+            print("Reading raw terraform.tfstate file...")
+            with open('terraform.tfstate', 'r') as state_file:
+                state_content = state_file.read()
+                print("Raw Terraform State File (first 500 chars):")
+                print(state_content[:500])  # Print just the beginning to avoid huge logs
+        
+        return {
+            "message": "Terraform applied successfully", 
+            "output": apply_process.stdout,
+            "state": state_process.stdout
+        }
 
     except Exception as e:
+        print(f"Error in run_terraform: {e}")
         return {"error": str(e)}
 
 
