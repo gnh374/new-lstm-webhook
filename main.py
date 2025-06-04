@@ -14,7 +14,7 @@ from scripts.model import Predictor
 from scripts.preprocessing import scale, Preprocessor # Import dari fetch_cpu.py
 
 WEBHOOK_ENDPOINTS = [
-    "http://3.229.64.47:30080/api/trigger",
+    "http://3.209.228.88:30080/api/trigger",
     "http://34.193.188.155:30080/api/trigger",
     "http://54.162.8.214:30080/api/trigger",
 ]
