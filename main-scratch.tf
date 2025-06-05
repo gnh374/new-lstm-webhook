@@ -13,7 +13,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
   assume_role {
     role_arn = "arn:aws:iam::903619784897:role/LabRole"
   }
@@ -27,12 +27,12 @@ resource "random_password" "k3s_token" {
 
 # Fetch the existing VPC
 data "aws_vpc" "existing_vpc" {
-  id = "vpc-098c8406fb9b8e482"
+  id = "vpc-08b4c8975b54d8fdf"
 }
 
 # Fetch the existing security group
 data "aws_security_group" "existing" {
-  id = "sg-075d4e2eaa9a80ad6"
+  id = "sg-0363557a19c24e7d1"
 }
 
 # Fetch the existing IAM instance profile
