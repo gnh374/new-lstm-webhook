@@ -13,10 +13,10 @@ class Preprocessor:
         self.polyorder = polyorder
         
     def transform(self, cpu_loads: np.ndarray, memory_loads: np.ndarray) -> torch.tensor:
-        # Generate all features
+  
         features = self._generate_features(cpu_loads, memory_loads)
         
-        # Scale all features
+
         return torch.from_numpy(features).float()[-self.window_length:].unsqueeze(0)
     
     def _generate_features(self, cpu_loads: np.ndarray, memory_loads: np.ndarray) -> np.ndarray:

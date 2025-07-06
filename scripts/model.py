@@ -13,8 +13,6 @@ class Predictor(nn.Module):
             bidirectional=True,
         )
 
-        # Fully connected layers
-        # The LSTM output size is doubled due to bidirectionality
         self.fc = nn.Sequential(
             nn.Dropout(),
             nn.Linear(in_features=hidden_size*2, out_features=64),
@@ -23,12 +21,11 @@ class Predictor(nn.Module):
         )
 
     def forward(self, x):
-        # Pass input through the LSTM
-        out, _ = self.memory_layer(x) # out shape: (batch_size, seq_len, hidden_size * 2)
+
+        out, _ = self.memory_layer(x)
 
         output = out[:, -1, :]
 
-        # Apply fully connected layers with ReLU activation
         output = self.fc(output)
 
         return sigmoid(output)

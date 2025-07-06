@@ -28,19 +28,6 @@ def train(model: nn.Module, loss_fn: nn.Module, optimizer: nn.Module, epochs: in
         # Print progress
         if (epoch + 1) % 10 == 0:
             print(f"Epoch [{epoch+1}/{epochs}], Train Loss: {avg_train_loss:.6f}")
-            # print(f"Epoch [{epoch+1}/{epochs}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}")
-
+          
     print("Training complete.")
     return model
-
-# if __name__ == '__main__':
-#     input_size = len(features)
-#     hidden_layer_size = 128
-#     output_size = len(target)
-
-#     model = Predictor(input_size, hidden_layer_size, output_size)
-#     loss_fn = RMSLELoss()
-#     # loss_fn = nn.L1Loss()
-#     optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001, weight_decay=0.01)
-    
-#     train

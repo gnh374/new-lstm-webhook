@@ -1,7 +1,6 @@
 import asyncio
 import aiohttp
 
-# List endpoint Prometheus tiap cluster
 PROMETHEUS_ENDPOINTS = [
     "http://3.209.228.88:30007/api/v1/query",
     "http://23.21.75.247:30007/api/v1/query",
@@ -9,7 +8,7 @@ PROMETHEUS_ENDPOINTS = [
 ]
 
 CLUSTER_DOWN = [
-    "http://54.236.180.248:30007/api/v1/query"
+    "http://18.206.143.225:30007/api/v1/query"
 ]
 
 LOAD ='sum(rate(container_cpu_usage_seconds_total{namespace="nginx", container!="", container!="POD"}[2m])) [30m:2m]'
@@ -20,7 +19,7 @@ async def fetch_cpu_usage(session, index, url, query):
         data = await response.json()
         print(data)
         values = [float(r[1]) for r in data["data"]["result"][0]["values"]]
-        return index, values  # Nama cluster langsung pakai index
+        return index, values
 
 async def fetch_down_cluster_load(session, url, query):
     try:
@@ -41,18 +40,14 @@ async def get_all_cpu_usage():
 
 async def get_all_cpu_usage_new():
     async with aiohttp.ClientSession() as session:
-        # Fetch CPU usage from active clusters
         active_tasks = [fetch_cpu_usage(session, idx, url, QUERY) 
                         for idx, url in enumerate(PROMETHEUS_ENDPOINTS)]
         
-        # Fetch CPU usage from down cluster using LOAD query
         down_task = fetch_down_cluster_load(session, CLUSTER_DOWN[0], LOAD)
         
-        # Run all tasks concurrently
         results = await asyncio.gather(*active_tasks)
         down_result = await down_task
         
-        # Combine results
         all_results = dict(results)
         all_results["down_cluster"] = down_result
 
